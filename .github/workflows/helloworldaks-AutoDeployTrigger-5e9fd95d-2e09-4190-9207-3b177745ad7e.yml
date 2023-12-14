@@ -1,0 +1,42 @@
+name: Trigger auto deployment for helloworldaks
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/helloworldaks-AutoDeployTrigger-5e9fd95d-2e09-4190-9207-3b177745ad7e.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.HELLOWORLDAKS_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: managed.azurecr.io
+          registryUsername: ${{ secrets.HELLOWORLDAKS_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.HELLOWORLDAKS_REGISTRY_PASSWORD }}
+          containerAppName: helloworldaks
+          resourceGroup: aca-ca-ws
+          imageToBuild: managed.azurecr.io/helloworldaks:${{ github.sha }}
+          dockerfilePath: Dockerfile
+
+     
+
