@@ -34,6 +34,7 @@ jobs:
           registryUsername: ${{ secrets.HELLOWORLDAKS_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.HELLOWORLDAKS_REGISTRY_PASSWORD }}
           containerAppName: helloworldaks
+          containerName: test
           resourceGroup: aca-ca-ws
           imageToBuild: managed.azurecr.io/helloworldaks:${{ github.sha }}
           dockerfilePath: Dockerfile
