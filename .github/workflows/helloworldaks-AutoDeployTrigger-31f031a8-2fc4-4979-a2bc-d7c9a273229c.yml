@@ -36,7 +36,14 @@ jobs:
           containerAppName: helloworldaks
           resourceGroup: aca-ca-ws
           imageToBuild: managed.azurecr.io/helloworldaks:${{ github.sha }}
-          
+
+      - name: Deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: managed.azurecr.io
+          containerAppName: my-gh-app
+          resourceGroup: aca-ca-ws
+          imageToDeploy: managed.azurecr.io/helloworldaks:${{ github.sha }}
 
      
 
